@@ -20,6 +20,6 @@ int main()
                "parameters in format circle(x y,r).\n");
         return 0;
     }
-    printf("circle(%.2f %.2f,%.2f)", x, y, r);
+    printf("circle(%.2f %.2f,%.2f)\n", x, y, r);
     return 0;
 }
