@@ -6,6 +6,7 @@ OBJ_DIR = obj
 BIN_DIR = bin
 
 APP_NAME = app
+
 GEOMETRY_OBJ = $(OBJ_DIR)/geometry/Geometry.o
 GEOMETRY_CALC_OBJ = $(OBJ_DIR)/libgeometry/geometry_calc.o
 
@@ -17,14 +18,13 @@ APP_OBJ = $(BIN_DIR)/$(APP_NAME)
 all: $(APP_OBJ)
 
 $(APP_OBJ): $(APP_DEPS)
+	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -o $@ $^
 
-$(GEOMETRY_OBJ): $(SRC_DIR)/geometry/Geometry.c
-	mkdir -p $(dir $@)
+$(GEOMETRY_OBJ): $(SRC_DIR)/geometry/Geometry.c | $(OBJ_DIR)/geometry
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(GEOMETRY_CALC_OBJ): $(SRC_DIR)/libgeometry/geometry_calc.c
-	mkdir -p $(dir $@)
+$(GEOMETRY_CALC_OBJ): $(SRC_DIR)/libgeometry/geometry_calc.c | $(OBJ_DIR)/libgeometry
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
@@ -33,5 +33,8 @@ clean:
 # Используем include для автоматической генерации зависимостей из исходных файлов
 -include $(OBJ_DIR)/geometry/Geometry.d $(OBJ_DIR)/libgeometry/geometry_calc.d
 
-# Добавляем проверку наличия объектных файлов, чтобы избежать повторной компиляции, если изменений не было
-$(APP_DEPS): | $(OBJ_DIR)/geometry $(OBJ_DIR)/libgeometry
+$(OBJ_DIR)/geometry:
+	mkdir -p $@
+
+$(OBJ_DIR)/libgeometry:
+	mkdir -p $@
