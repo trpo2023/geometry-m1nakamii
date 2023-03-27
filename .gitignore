@@ -1,1 +1,5 @@
-*Geometry
+*obj/geometry/Geometry
+*obj/geometry/Geometry.o
+*obj/libgeometry/geometry_calc
+*obj/libgeometry/geometry_calc.o
+*bin/app

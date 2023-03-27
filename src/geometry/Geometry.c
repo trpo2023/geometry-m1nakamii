@@ -9,8 +9,7 @@ int main()
     char input[MAX_LEN];
     printf("Enter the circle parameters in format circle(x y,r):");
     fgets(input, MAX_LEN, stdin);
-
-    float cx, c_y, c_r;
+    float c_x, c_y, c_r;
 
     if (strncmp(input, "circle(", 7) != 0) {
         printf("Error: Input string must start with 'circle'\n");
