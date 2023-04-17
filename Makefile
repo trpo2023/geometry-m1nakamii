@@ -8,13 +8,17 @@ BIN_DIR = bin
 APP_NAME = app
 
 GEOMETRY_OBJ = $(OBJ_DIR)/geometry/Geometry.o
-GEOMETRY_CALC_A= $(OBJ_DIR)/libgeometry/geometry_calc.a
-GEOMETRY_CALC_OBJ= $(OBJ_DIR)/libgeometry/geometry_calc.o
+GEOMETRY_CALC_A = $(OBJ_DIR)/libgeometry/geometry_calc.a
+GEOMETRY_CALC_OBJ = $(OBJ_DIR)/libgeometry/geometry_calc.o
 
 APP_DEPS = $(GEOMETRY_OBJ) $(GEOMETRY_CALC_A)
 APP_OBJ = $(BIN_DIR)/$(APP_NAME)
 
-.PHONY: all clean
+TEST_MAIN_FILE = test/main.c
+TEST_DEPS = $(GEOMETRY_CALC_OBJ) $(OBJ_DIR)/parser_test.o
+TEST_OBJ = $(BIN_DIR)/test_app
+
+#Сборка приложения
 
 all: $(APP_OBJ)
 
@@ -25,18 +29,37 @@ $(APP_OBJ): $(APP_DEPS)
 $(GEOMETRY_OBJ): $(SRC_DIR)/geometry/Geometry.c | $(OBJ_DIR)/geometry
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(GEOMETRY_CALC_A): $(OBJ_DIR)/libgeometry/geometry_calc.o | $(OBJ_DIR)/libgeometry
+$(GEOMETRY_CALC_A): $(GEOMETRY_CALC_OBJ) | $(OBJ_DIR)/libgeometry
 	ar rcs $@ $<
 $(GEOMETRY_CALC_OBJ): $(SRC_DIR)/libgeometry/geometry_calc.c | $(OBJ_DIR)/libgeometry
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
+#Тестирование приложения
 
--include $(OBJ_DIR)/geometry/Geometry.d $(OBJ_DIR)/libgeometry/geometry_calc.d
+test: $(TEST_OBJ)
+	$(TEST_OBJ)
+
+$(TEST_OBJ): $(TEST_DEPS) $(TEST_MAIN_FILE)
+	mkdir -p $(dir $@) 
+	$(CC) $(CFLAGS) -o $@ $^
+
+$(OBJ_DIR)/parser_test.o: test/parser_test.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+#Создание папок obj
+
+#Создание папок obj
 
 $(OBJ_DIR)/geometry:
 	mkdir -p $@
 
 $(OBJ_DIR)/libgeometry:
 	mkdir -p $@
+
+$(OBJ_DIR):
+	mkdir -p $@
+
+# make clean
+
+clean:
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
