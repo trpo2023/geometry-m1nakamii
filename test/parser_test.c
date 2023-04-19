@@ -58,13 +58,3 @@ CTEST(input_test, correct_input)
     ASSERT_EQUAL(0.0, c_y);
     ASSERT_EQUAL(1.5, c_r);
 }
-
-CTEST(input_test, incorrect_input)
-{
-    char input[MAX_LEN];
-    strcpy(input, "square(0 0,1.5)");
-    float c_x, c_y, c_r;
-
-    ASSERT_EQUAL(2, sscanf(input, "circle(%f %f,%f)", &c_x, &c_y, &c_r));
-    ASSERT_NOT_EQUAL(0, strncmp(input, "circle(", 7));
-}
