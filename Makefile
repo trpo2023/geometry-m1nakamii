@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror
+CFLAGS = -Wall -Werror -I src -MP -MMD
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -24,19 +24,19 @@ all: $(APP_OBJ)
 
 $(APP_OBJ): $(APP_DEPS)
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
 $(GEOMETRY_OBJ): $(SRC_DIR)/geometry/Geometry.c | $(OBJ_DIR)/geometry
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(GEOMETRY_CALC_A): $(GEOMETRY_CALC_OBJ) | $(OBJ_DIR)/libgeometry
+$(GEOMETRY_CALC_A): $(GEOMETRY_CALC_OBJ) $(TEST_OBJ) | $(OBJ_DIR)/libgeometry
 	ar rcs $@ $<
 $(GEOMETRY_CALC_OBJ): $(SRC_DIR)/libgeometry/geometry_calc.c | $(OBJ_DIR)/libgeometry
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 #Тестирование приложения
 
-test: $(TEST_OBJ)
+test: $(TEST_OBJ) $(GEOMETRY_CALC_A)
 	$(TEST_OBJ)
 
 $(TEST_OBJ): $(TEST_DEPS) $(TEST_MAIN_FILE)
@@ -45,8 +45,6 @@ $(TEST_OBJ): $(TEST_DEPS) $(TEST_MAIN_FILE)
 
 $(OBJ_DIR)/parser_test.o: test/parser_test.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
-
-#Создание папок obj
 
 #Создание папок obj
 
