@@ -45,16 +45,60 @@ CTEST(circle_perimeter, negative_radius)
 
     ASSERT_DBL_NEAR(expected_perimeter, result);
 }
+char inputs[][MAX_LEN] = {
+        "circle(0,0,1.5)",
+        "circle(1,1,2.0)",
+        "circle(2,2,2.5)",
+};
 
 CTEST(input_test, correct_input)
 {
     char input[MAX_LEN];
-    strcpy(input, "circle(0 0,1.5)");
-    float c_x, c_y, c_r;
+    strcpy(input, "circle(0 0,2)");
 
-    ASSERT_EQUAL(3, sscanf(input, "circle(%f %f,%f)", &c_x, &c_y, &c_r));
-    ASSERT_EQUAL(0, strncmp(input, "circle(", 7));
-    ASSERT_EQUAL(0.0, c_x);
-    ASSERT_EQUAL(0.0, c_y);
-    ASSERT_EQUAL(1.5, c_r);
+    char inputs[1][MAX_LEN];
+    strcpy(inputs[0], input);
+
+    struct Circle circles[1]; // создаем временный массив структур Circle
+    int result = parser(1, inputs, circles);
+    ASSERT_EQUAL(0, result);
+}
+
+CTEST(input_test, incorrect_input)
+{
+    char input[MAX_LEN];
+    strcpy(input, "circle (0 0, 1.5)");
+
+    char inputs[1][MAX_LEN];
+    strcpy(inputs[0], input);
+
+    struct Circle circles[1]; // создаем временный массив структур Circle
+    int result = parser(1, inputs, circles);
+    ASSERT_EQUAL(1, result);
+}
+
+CTEST(input_test, another_input)
+{
+    char input[MAX_LEN];
+    strcpy(input, "circle(");
+
+    char inputs[1][MAX_LEN];
+    strcpy(inputs[0], input);
+
+    struct Circle circles[1]; // создаем временный массив структур Circle
+    int result = parser(1, inputs, circles);
+    ASSERT_EQUAL(1, result);
+}
+
+CTEST(input_test, incorrect_circle_name_input)
+{
+    char input[MAX_LEN];
+    strcpy(input, "ccle(");
+
+    char inputs[1][MAX_LEN];
+    strcpy(inputs[0], input);
+
+    struct Circle circles[1]; // создаем временный массив структур Circle
+    int result = parser(1, inputs, circles);
+    ASSERT_EQUAL(1, result);
 }
