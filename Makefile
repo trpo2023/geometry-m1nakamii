@@ -14,7 +14,7 @@ GEOMETRY_CALC_OBJ = $(OBJ_DIR)/libgeometry/geometry_calc.o
 APP_DEPS = $(GEOMETRY_OBJ) $(GEOMETRY_CALC_A)
 APP_OBJ = $(BIN_DIR)/$(APP_NAME)
 
-TEST_MAIN_FILE = test/main_test.c
+TEST_MAIN_FILE = test/main.c
 TEST_DEPS = $(GEOMETRY_CALC_OBJ) $(OBJ_DIR)/parser_test.o
 TEST_OBJ = $(BIN_DIR)/test_app
 
